@@ -1,0 +1,34 @@
+.player {
+    display: flex;
+    flex-direction: row;
+}
+
+.settings {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.section {
+    border-bottom: 1px solid black;
+    padding-bottom: 3px;
+    margin-bottom: 15px;
+}
+
+.setting {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.setting .label {
+    margin-right: 10px;
+    min-width: 70px;
+}
+
+.setting .control {
+    flex-grow: 1;
+}
+
+.buttons {
+    margin-top: 10px;
+}

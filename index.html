@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <h1>Hello, Lorenz!</h1>
+    <div class="player">
+        <div class="canvas"></div>
+        <div class="settings">
+            <div class="section">Initial pos:</div>
+
+            <div class="setting">
+                <div class="label">X:</div>
+                <div class="control">
+                    <input type="number" min="-100" max="100" step="0.001" id="x0">
+                </div>
+            </div>
+
+            <div class="setting">
+                <div class="label">Y:</div>
+                <div class="control">
+                    <input type="number" min="-100" max="100" step="0.001" id="y0">
+                </div>
+            </div>
+
+            <div class="setting">
+                <div class="label">Z:</div>
+                <div class="control">
+                    <input type="number" min="-100" max="100" step="0.001" id="z0">
+                </div>
+            </div>
+
+            <div class="section">Constants:</div>
+
+            <div class="setting">
+                <div class="label">rho:</div>
+                <div class="control">
+                    <input type="number" min="-100" max="100" step="0.001" id="rho">
+                </div>
+            </div>
+
+            <div class="setting">
+                <div class="label">sigma:</div>
+                <div class="control">
+                    <input type="number" min="-100" max="100" step="0.001" id="sigma">
+                </div>
+            </div>
+
+            <div class="setting">
+                <div class="label">betta:</div>
+                <div class="control">
+                    <input type="number" min="-100" max="100" step="0.001" id="betta">
+                </div>
+            </div>
+
+            <div class="section">Simulation:</div>
+
+            <div class="setting">
+                <div class="label">delta:</div>
+                <div class="control">
+                    <input type="number" min="-100" max="100" step="0.001" id="dt">
+                </div>
+            </div>
+
+            <div class="setting">
+                <div class="label">iterations:</div>
+                <div class="control">
+                    <input type="number" min="0" max="100000" step="0.001" id="it">
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button id="update">Update</button>
+                <button id="reset">Reset</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
