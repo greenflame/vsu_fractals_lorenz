@@ -9,6 +9,11 @@ let rho, sigma, betta;
 let dt, it;
 let x0, y0, z0;
 
+let colorScheme = {
+    background: '#fffcf2',
+    color1: '#252422',
+    color2: '#eb5e28'
+};
 
 $(function () {
 
@@ -26,10 +31,13 @@ function init() {
     let w = 800, h = 600;
 
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 1000);
+    scene.background = new THREE.Color(colorScheme.background);
 
-    renderer = new THREE.WebGLRenderer();
+    camera = new THREE.PerspectiveCamera(30, w / h, 0.1, 1000);
+
+    renderer = new THREE.WebGLRenderer({ antialias: false });
     renderer.setSize(w, h);
+
     $('.canvas').append(renderer.domElement);
 
     camera.position.z = 5;
@@ -73,18 +81,45 @@ function update() {
     y0 = parseFloat($('#y0').val());
     z0 = parseFloat($('#z0').val());
 
-    var geometry = new THREE.Geometry();
+    let geometry = new THREE.Geometry();
 
-    for (var i = 0; i < it; i++) {
+    let minDist = Number.MAX_VALUE, maxDist = Number.MIN_VALUE;
+
+    for (let i = 0; i < it; i++) {
         x1 = x0 + dt * sigma * (x0 - y0);
         y1 = y0 + dt * (-x0 * z0 + rho * x0 - y0);
         z1 = z0 + dt * (x0 * y0 - betta * z0);
 
         geometry.vertices.push(new THREE.Vector3(x1, y1, z1));
 
+        if (i !== 0) {
+            let cur = geometry.vertices[geometry.vertices.length - 1];
+            let prev = geometry.vertices[geometry.vertices.length - 2];
+
+            let curDist = cur.distanceTo(prev);
+
+            minDist = Math.min(minDist, curDist);
+            maxDist = Math.max(maxDist, curDist);
+        }
+
         x0 = x1;
         y0 = y1;
         z0 = z1;
+    }
+
+    let color1 = new THREE.Color(colorScheme.color1);
+    let color2 = new THREE.Color(colorScheme.color2);
+
+    geometry.colors.push(new THREE.Color('black'));
+
+    for (let i = 0; i < it - 1; i++) {
+        let v1 = geometry.vertices[i];
+        let v2 = geometry.vertices[i + 1];
+
+        let d = v1.distanceTo(v2);
+        let alpha = (d - minDist) / (maxDist - minDist);
+
+        geometry.colors.push(color1.clone().lerp(color2, alpha));
     }
 
     geometry.normalize();
@@ -93,7 +128,7 @@ function update() {
         scene.remove(model);
     }
 
-    var material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    let material = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors });
     model = new THREE.Line(geometry, material);
     scene.add(model);
 }
