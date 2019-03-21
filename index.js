@@ -40,9 +40,10 @@ function init() {
 
     $('.canvas').append(renderer.domElement);
 
-    camera.position.z = 5;
+    camera.position.z = 3.5;
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableKeys = false;
 
     window.addEventListener('resize', onWindowResize, false);
 }
@@ -56,8 +57,8 @@ function reset() {
     rho = 28;
     sigma = -6;
     betta = 1;
-    dt = 0.001;
-    it = 100000;
+    dt = 0.01;
+    it = 10000;
     x0 = 0;
     y0 = 1;
     z0 = 10;
