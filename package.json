@@ -6,5 +6,8 @@
   "dependencies": {
     "jquery": "^3.3.1",
     "three": "^0.102.1"
+  },
+  "devDependencies": {
+    "cssnano": "^4.1.10"
   }
 }

@@ -9,6 +9,10 @@ let rho, sigma, betta;
 let dt, it;
 let x0, y0, z0;
 
+let exw, exh;
+
+let updateAnimation = true;
+
 let colorScheme = {
     background: 'white',
     color1: '#f6f7f8',
@@ -35,7 +39,11 @@ function init() {
 
     camera = new THREE.PerspectiveCamera(30, w / h, 0.1, 1000);
 
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        preserveDrawingBuffer: true
+    });
+
     renderer.setSize(w, h);
 
     $('.canvas').append(renderer.domElement);
@@ -51,6 +59,7 @@ function init() {
 function bind() {
     $('#update').click(update);
     $('#reset').click(function () { reset(); update(); });
+    $('#save').click(save);
 }
 
 function reset() {
@@ -63,6 +72,9 @@ function reset() {
     y0 = 1;
     z0 = 10;
 
+    exw = 1920 * 2;
+    exh = 1080 * 2;
+
     $('#rho').val(rho);
     $('#sigma').val(sigma);
     $('#betta').val(betta);
@@ -71,6 +83,9 @@ function reset() {
     $('#x0').val(x0);
     $('#y0').val(y0);
     $('#z0').val(z0);
+    
+    $('#exw').val(exw);
+    $('#exh').val(exh);
 }
 
 function update() {
@@ -114,8 +129,10 @@ function update() {
 }
 
 function animate() {
-    controls.update();
-    renderer.render(scene, camera);
+    if (updateAnimation) {
+        controls.update();
+        renderer.render(scene, camera);
+    }
 
     requestAnimationFrame(animate);
 }
@@ -123,7 +140,46 @@ function animate() {
 function onWindowResize() {
     let w = $('.canvas').innerWidth() - 10, h = $('.canvas').innerHeight() - 10;
 
+    resize(w, h);
+}
+
+function resize(w, h) {
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h);
+}
+
+function save() {
+    updateAnimation = false;
+
+    exw = parseInt($('#exw').val());
+    xeh = parseInt($('#exh').val());
+
+    resize(exw, exh);
+    renderer.render(scene, camera);
+
+    try {
+        var strMime = "image/png";
+        var imgData = renderer.domElement.toDataURL(strMime);
+        saveFile(imgData.replace(strMime, "image/octet-stream"), "lorenz.png");
+    } catch (e) {
+        console.log(e);
+    }
+
+    onWindowResize();
+
+    updateAnimation = true;
+}
+
+function saveFile(strData, filename) {
+    var link = document.createElement('a');
+    if (typeof link.download === 'string') {
+        document.body.appendChild(link); //Firefox requires the link to be in the body
+        link.download = filename;
+        link.href = strData;
+        link.click();
+        document.body.removeChild(link); //remove the link when done
+    } else {
+        location.replace(uri);
+    }
 }
